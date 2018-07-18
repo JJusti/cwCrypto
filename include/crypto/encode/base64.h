@@ -1,6 +1,8 @@
 #ifndef __ENCODE_BASE64_H__
 #define __ENCODE_BASE64_H__    1
 
+#include "crypto/base.h"
+
 #include <string>
 #include <vector>
 

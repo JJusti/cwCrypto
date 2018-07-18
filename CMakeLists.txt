@@ -29,6 +29,9 @@ if(MSVC)
   add_compile_options(/W3 /wd4005 /wd4996 /wd4018 -D_CRT_SECURE_NO_WARNINGS)
 endif()
 
+SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
+SET(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib) 
+
 add_subdirectory(include)
 add_subdirectory(src)
 
