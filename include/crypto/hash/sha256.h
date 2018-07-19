@@ -28,14 +28,14 @@ public:
     /** 获取SHA256计算结果
      * @return 返回字符串形式SHA256计算结果
     */
-    std::string SHA256Value() const;
+    std::string Value() const;
 
     /** 获取原始SHA256计算结果
      * @param [in|out] 计算结果保存缓冲区地址
      * @param [in] 计算结果保存缓冲区大小
      * @return 返回二进制形式SHA256计算结果
     */
-    void RawSHA256Value(unsigned char* buff, size_t len) const;
+    void RawValue(unsigned char* buff, size_t len) const;
 
     /** 计算字符串SHA256值
      * @param [in] src 需要计算SHA256值得字符串
@@ -49,6 +49,6 @@ public:
      * @return 返回数据缓冲区对应的SHA256值
     */
     static std::string Calc(const unsigned char* s, size_t len);
-}
+};
 
-#endif
+#endif // __SHA256_H__

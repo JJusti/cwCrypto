@@ -20,13 +20,24 @@
 class Hash
 {
 public:
+
+    enum Type
+    {
+        MD5,
+        SHA,
+        SHA224,
+        SHA256,
+        SHA384,
+        SHA512,
+    };
+
     Hash();
     virtual~Hash();
 
     /** 结果大小
      * @return 返回摘要算法结果大小
     */
-    static size_t digestSize();
+    size_t digestSize();
 
     /** 初始化hash计算环境
      * @note 首次准备计算hash值或准备重新开始计算新数据hash值调用
@@ -55,6 +66,8 @@ public:
      * @return 返回二进制形式hash计算结果
     */
     void RawHashValue(unsigned char* buff, size_t len) const;
+
+public:
 
     /** 计算字符串hash值
      * @param [in] src 需要计算hash值得字符串

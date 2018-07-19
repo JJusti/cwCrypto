@@ -1,6 +1,6 @@
 #include "crypto/encode/base64.h"
 
-namespace cwfl { namespace crypto {
+CW_CRYPTO_NAMESPACE_BEGIN
 
 static const std::string base64_chars =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -196,4 +196,4 @@ bool Base64::Decode(const unsigned char* src, size_t srcLen, std::vector<unsigne
     return true;
 }
 
-}}
+CW_CRYPTO_NAMESPACE_END
