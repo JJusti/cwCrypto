@@ -1,13 +1,17 @@
 include_directories(../../include)
 include_directories(../../vendor/openssl/${PLATFORMTARGET}/include)
+include_directories(../../vendor/GmSSL/${PLATFORMTARGET}/include)
 
 link_directories("../../vendor/openssl/${PLATFORMTARGET}/lib")
+link_directories("../../vendor/GmSSL/${PLATFORMTARGET}/lib")
 
 set(CPP_HDRS
   ../../include/crypto/base.h
   ../../include/crypto/crypto.h
   ../../include/crypto/cipher/rc4.h
   ../../include/crypto/cipher/rsa.h
+  ../../include/crypto/cipher/sm2.h
+  ../../include/crypto/cipher/sm4.h
   ../../include/crypto/encode/base64.h
   ../../include/crypto/hash/md5.h
   ../../include/crypto/hash/sha.h
@@ -34,6 +38,4 @@ set(CPP_SOURCES
 
 add_library(cwcrypto ${CPP_HDRS} ${CPP_SOURCES})
 
-
-
-target_link_libraries(cwcrypto libeay32 ssleay32)
+target_link_libraries(cwcrypto libeay32 ssleay32 libssl libcrypto)

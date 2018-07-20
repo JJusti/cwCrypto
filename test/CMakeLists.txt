@@ -14,16 +14,19 @@ message(STATUS $(PLATFORMTARGET))
 include_directories(../include/)
 include_directories(../vendor/googletest/include/)
 include_directories(../vendor/openssl/${PLATFORMTARGET}/include)
+include_directories(../vendor/GmSSL/${PLATFORMTARGET}/include)
 
 link_directories("../vendor/openssl/${PLATFORMTARGET}/lib")
+link_directories("../vendor/GmSSL/${PLATFORMTARGET}/lib")
 
 set(CPP_TEST_SOURCES
   crypto/crypto_test.cpp
   crypto/encode/base64_test.cpp
   crypto/hash/md5_test.cpp
   crypto/hash/sha_test.cpp
+  crypto/hash/sm3_test.cpp
 )
 
-add_executable(cwfl_test ${CPP_TEST_SOURCES})
+add_executable(test ${CPP_TEST_SOURCES})
 
-target_link_libraries(cwfl_test cwcrypto gtest gtest_main libeay32 ssleay32)
+target_link_libraries(test cwcrypto gtest gtest_main libeay32 ssleay32 libssl libcrypto)
