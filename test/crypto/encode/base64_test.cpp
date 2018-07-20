@@ -1,8 +1,6 @@
 #include "crypto/encode/base64.h"
 #include "gtest/gtest.h"
 
-using namespace cwfl::crypto;
-
 TEST(crypto, base64_encode_string)
 {
     EXPECT_EQ(Base64::Encode(std::string("")), std::string(""));

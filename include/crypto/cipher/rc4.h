@@ -1,7 +1,7 @@
 #ifndef __CIPHER_RC4_H__
 #define __CIPHER_RC4_H__    1
 
-#include <stdint.h>
+#include "crypto/base.h"
 
 /** RC4加密算法
  * - 对称加密
@@ -20,10 +20,9 @@ public:
     ~RC4();
 
     /** 设置加密或者解密的Key数据, 并初始化状态
-    @param [in] key 密钥数据缓冲区
-    @param [in] keyLen 密钥数据长度
+    @param [in] key 密钥
     */
-    void SetKey(const unsigned char* key, uint32_t keyLen);
+    void SetKey(const std::string& key);
 
     /** 加密数据（每次开始数据流开始时， 都需要调用SetKeyData设置密钥）
     @param [in,out] data 输入待加密的数据, 返回加密后的数据
@@ -36,6 +35,16 @@ public:
     @param [in] dataLen 数据长度
     */
     void Decrypt(unsigned char* data, uint32_t dataLen);
-}
+
+public:
+
+    static std::string Encrypt(const std::string &clearText, const std::string &key);
+	
+    static std::string Decrypt(const std::string &cipherText, const std::string &key);
+
+private:
+    struct IMPL;
+    std::unique_ptr<IMPL> impl_;
+};
 
 #endif // __CIPHER_RC4_H__

@@ -1,7 +1,7 @@
 #ifndef __HASH_H__
 #define __HASH_H__  1
 
-#include <string>
+#include "crypto/base.h"
 
 /** 摘要算法
  * 使用:
@@ -21,8 +21,9 @@ class Hash
 {
 public:
 
-    enum Type
+    enum class Name
     {
+
         MD5,
         SHA,
         SHA224,
@@ -37,7 +38,7 @@ public:
     /** 结果大小
      * @return 返回摘要算法结果大小
     */
-    size_t digestSize();
+    size_t digestLength();
 
     /** 初始化hash计算环境
      * @note 首次准备计算hash值或准备重新开始计算新数据hash值调用
@@ -73,14 +74,14 @@ public:
      * @param [in] src 需要计算hash值得字符串
      * @return 返回 src 对应的字符串hash值
     */
-    static std::string Calc(const std::string& src);
+    static std::string Calc(Name, const std::string& src);
 
     /** 计算数据缓冲区hash值
      * @param [in] s 数据缓冲区地址
      * @param [in] len 数据缓冲区大小
      * @return 返回数据缓冲区对应字符串hash值
     */
-    static std::string Calc(const unsigned char* s, size_t len);
-}
+    static std::string Calc(Name, const unsigned char* s, size_t len);
+};
 
 #endif

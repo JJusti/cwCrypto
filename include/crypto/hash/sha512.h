@@ -1,13 +1,18 @@
 #ifndef __SHA512_H__
 #define __SHA512_H__    1
 
-#include <string>
+#include "crypto/base.h"
 
 class SHA512
 {
 public:
     SHA512();
     ~SHA512();
+
+    /** 结果大小
+     * @return 返回摘要算法结果大小
+    */
+    static size_t digestLength();
 
     /** 初始化SHA512计算环境
      * @note 首次准备计算SHA512值或准备重新开始计算新数据SHA512值调用
@@ -37,6 +42,8 @@ public:
     */
     void RawValue(unsigned char* buff, size_t len) const;
 
+public:
+
     /** 计算字符串SHA512值
      * @param [in] src 需要计算SHA512值得字符串
      * @return 返回 src 对应的SHA512值
@@ -49,6 +56,10 @@ public:
      * @return 返回数据缓冲区对应的SHA512值
     */
     static std::string Calc(const unsigned char* s, size_t len);
+
+private:
+    struct IMPL;
+    std::unique_ptr<IMPL> impl_;
 };
 
 #endif // __SHA512_H__
