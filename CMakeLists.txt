@@ -55,7 +55,9 @@ MESSAGE(STATUS "current platformtarget: ${PLATFORMTARGET}")
 MESSAGE(STSTUS "###################################")
 
 if(MSVC)
-    add_compile_options(/W3 /wd4005 /wd4996 /wd4018 -D_CRT_SECURE_NO_WARNINGS)
+    add_compile_options(/W3 /wd4005 /wd4996 /wd4018)
+    add_compile_options(/source-charset:utf-8)
+    add_compile_options(-DUNICODE -D_UNICODE -D_CRT_SECURE_NO_WARNINGS)
 endif()
 
 ucm_set_runtime(STATIC)

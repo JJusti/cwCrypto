@@ -11,13 +11,13 @@ endif()
 
 message(STATUS $(PLATFORMTARGET))
 
-include_directories(../include/)
-include_directories(../vendor/googletest/include/)
-include_directories(../vendor/openssl/${PLATFORMTARGET}/include)
-include_directories(../vendor/GmSSL/${PLATFORMTARGET}/include)
+include_directories(${PROJECT_SOURCE_DIR}/include/)
+include_directories(${PROJECT_SOURCE_DIR}/vendor/googletest/include/)
+include_directories(${PROJECT_SOURCE_DIR}/vendor/openssl/${PLATFORMTARGET}/include)
+include_directories(${PROJECT_SOURCE_DIR}/vendor/GmSSL/${PLATFORMTARGET}/include)
 
-link_directories("../vendor/openssl/${PLATFORMTARGET}/lib")
-link_directories("../vendor/GmSSL/${PLATFORMTARGET}/lib")
+link_directories("${PROJECT_SOURCE_DIR}/vendor/openssl/${PLATFORMTARGET}/lib")
+link_directories("${PROJECT_SOURCE_DIR}/vendor/GmSSL/${PLATFORMTARGET}/lib")
 
 set(CPP_TEST_SOURCES
   crypto/crypto_test.cpp

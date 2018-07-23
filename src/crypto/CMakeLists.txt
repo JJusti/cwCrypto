@@ -1,29 +1,31 @@
-include_directories(../../include)
-include_directories(../../vendor/openssl/${PLATFORMTARGET}/include)
-include_directories(../../vendor/GmSSL/${PLATFORMTARGET}/include)
+include_directories(${PROJECT_SOURCE_DIR}/include)
+include_directories(${PROJECT_SOURCE_DIR}/vendor/openssl/${PLATFORMTARGET}/include)
+include_directories(${PROJECT_SOURCE_DIR}/vendor/GmSSL/${PLATFORMTARGET}/include)
 
-link_directories("../../vendor/openssl/${PLATFORMTARGET}/lib")
-link_directories("../../vendor/GmSSL/${PLATFORMTARGET}/lib")
+link_directories("${PROJECT_SOURCE_DIR}/vendor/openssl/${PLATFORMTARGET}/lib")
+link_directories("${PROJECT_SOURCE_DIR}/vendor/GmSSL/${PLATFORMTARGET}/lib")
 
 set(CPP_HDRS
-  ../../include/crypto/base.h
-  ../../include/crypto/crypto.h
-  ../../include/crypto/cipher/rc4.h
-  ../../include/crypto/cipher/rsa.h
-  ../../include/crypto/cipher/sm2.h
-  ../../include/crypto/cipher/sm4.h
-  ../../include/crypto/encode/base64.h
-  ../../include/crypto/hash/md5.h
-  ../../include/crypto/hash/sha.h
-  ../../include/crypto/hash/sha224.h
-  ../../include/crypto/hash/sha256.h
-  ../../include/crypto/hash/sha384.h
-  ../../include/crypto/hash/sha512.h
-  ../../include/crypto/hash/sm3.h
+  ${PROJECT_SOURCE_DIR}/include/crypto/base.h
+  ${PROJECT_SOURCE_DIR}/include/crypto/crypto.h
+  ${PROJECT_SOURCE_DIR}/include/crypto/cipher/aes.h
+  ${PROJECT_SOURCE_DIR}/include/crypto/cipher/rc4.h
+  ${PROJECT_SOURCE_DIR}/include/crypto/cipher/rsa.h
+  ${PROJECT_SOURCE_DIR}/include/crypto/cipher/sm2.h
+  ${PROJECT_SOURCE_DIR}/include/crypto/cipher/sm4.h
+  ${PROJECT_SOURCE_DIR}/include/crypto/encode/base64.h
+  ${PROJECT_SOURCE_DIR}/include/crypto/hash/md5.h
+  ${PROJECT_SOURCE_DIR}/include/crypto/hash/sha.h
+  ${PROJECT_SOURCE_DIR}/include/crypto/hash/sha224.h
+  ${PROJECT_SOURCE_DIR}/include/crypto/hash/sha256.h
+  ${PROJECT_SOURCE_DIR}/include/crypto/hash/sha384.h
+  ${PROJECT_SOURCE_DIR}/include/crypto/hash/sha512.h
+  ${PROJECT_SOURCE_DIR}/include/crypto/hash/sm3.h
 )
 
 set(CPP_SOURCES
   crypto.cpp
+  cipher/aes.cpp
   cipher/rc4.cpp
   cipher/rsa.cpp
   encode/base64.cpp
