@@ -4,7 +4,7 @@
 
 struct SM3::IMPL
 {
-    IMPL():
+    IMPL() :
         hasData_(false)
     {
     }

@@ -150,6 +150,66 @@ bool Base64::Decode(const std::string& src, std::string& out)
     return true;
 }
 
+bool Base64::Decode(const unsigned char* src, size_t srcLen, unsigned char* decoded, size_t& decoded_length)
+{
+    if ((src == NULL) || (srcLen < 1))
+        return false;
+    if ((decoded == NULL) || (decoded_length < 1))
+        return false;
+
+    size_t i = 0;
+    size_t j = 0;
+    size_t in_ = 0;
+    unsigned char char_array_4[4];
+    unsigned char char_array_3[3];
+
+    size_t offset = 0;
+    while (srcLen-- && (src[in_] != '=') && is_base64(src[in_])) {
+        char_array_4[i++] = src[in_]; in_++;
+        if (i == 4) {
+            for (i = 0; i <4; i++)
+                char_array_4[i] = (unsigned char)base64_chars.find(char_array_4[i]);
+
+            char_array_3[0] = (char_array_4[0] << 2) + ((char_array_4[1] & 0x30) >> 4);
+            char_array_3[1] = ((char_array_4[1] & 0xf) << 4) + ((char_array_4[2] & 0x3c) >> 2);
+            char_array_3[2] = ((char_array_4[2] & 0x3) << 6) + char_array_4[3];
+
+            for (i = 0; i < 3; i++)
+            {
+                if (offset < decoded_length)
+                    decoded[offset++] = char_array_3[i];
+                else
+                    return false;
+            }
+            i = 0;
+        }
+    }
+
+    if (i) {
+        for (j = i; j <4; j++)
+            char_array_4[j] = 0;
+
+        for (j = 0; j <4; j++)
+            char_array_4[j] = (unsigned char)base64_chars.find(char_array_4[j]);
+
+        char_array_3[0] = (char_array_4[0] << 2) + ((char_array_4[1] & 0x30) >> 4);
+        char_array_3[1] = ((char_array_4[1] & 0xf) << 4) + ((char_array_4[2] & 0x3c) >> 2);
+        char_array_3[2] = ((char_array_4[2] & 0x3) << 6) + char_array_4[3];
+
+        for (j = 0; (j < i - 1); j++)
+        {
+            if (offset < decoded_length)
+                decoded[offset++] = char_array_3[j];
+            else
+                return false;
+        }
+    }
+
+    decoded_length = offset;
+
+    return true;
+}
+
 bool Base64::Decode(const unsigned char* src, size_t srcLen, std::vector<unsigned char>& out)
 {
     out.clear();

@@ -10,16 +10,14 @@ public:
     ~CWRSA();
     
     void SetKey(const std::string& key);
-    void Encrypt(unsigned char* data, uint32_t dataLen);
-    void Decrypt(unsigned char* data, uint32_t dataLen);
 
-public:
-
-    static std::string Encrypt(const std::string &clearText, const std::string &key);
-    static std::string Decrypt(const std::string &cipherText, const std::string &key);
+    int32_t PublicEncrypt(unsigned char *data, size_t data_len, unsigned char *key, unsigned char *encrypted);
+    int32_t PrivateDecrypt(unsigned char *enc_data, size_t data_len, unsigned char *key, unsigned char *decrypted);
+    int32_t PrivateEncrypt(unsigned char *data, size_t data_len, unsigned char *key, unsigned char *encrypted);
+    int32_t PublicDecrypt(unsigned char * enc_data, size_t data_len, unsigned char *key, unsigned char *decrypted);
 
 private:
-    struct IMPL;
+    class IMPL;
     std::unique_ptr<IMPL> impl_;
 };
 

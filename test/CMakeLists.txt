@@ -13,10 +13,10 @@ message(STATUS $(PLATFORMTARGET))
 
 include_directories(${PROJECT_SOURCE_DIR}/include/)
 include_directories(${PROJECT_SOURCE_DIR}/vendor/googletest/include/)
-include_directories(${PROJECT_SOURCE_DIR}/vendor/openssl/${PLATFORMTARGET}/include)
+#include_directories(${PROJECT_SOURCE_DIR}/vendor/openssl/${PLATFORMTARGET}/include)
 include_directories(${PROJECT_SOURCE_DIR}/vendor/GmSSL/${PLATFORMTARGET}/include)
 
-link_directories("${PROJECT_SOURCE_DIR}/vendor/openssl/${PLATFORMTARGET}/lib")
+#link_directories("${PROJECT_SOURCE_DIR}/vendor/openssl/${PLATFORMTARGET}/lib")
 link_directories("${PROJECT_SOURCE_DIR}/vendor/GmSSL/${PLATFORMTARGET}/lib")
 
 set(CPP_TEST_SOURCES
@@ -29,4 +29,5 @@ set(CPP_TEST_SOURCES
 
 add_executable(test ${CPP_TEST_SOURCES})
 
-target_link_libraries(test cwcrypto gtest gtest_main libeay32 ssleay32 libssl libcrypto)
+#target_link_libraries(test cwcrypto gtest gtest_main libssl libcrypto legacy_stdio_definitions)
+target_link_libraries(test cwcrypto gtest gtest_main libssl libcrypto)

@@ -29,7 +29,7 @@ size_t SHA::digestLength()
 
 void SHA::Init()
 {
-    SHA_Init(&impl_->ctx_);
+    SHA1_Init(&impl_->ctx_);
     impl_->hasData_ = false;
 }
 
@@ -38,7 +38,7 @@ void SHA::Update(const std::string& src)
     if (src.empty())
         return;
 
-    SHA_Update(&impl_->ctx_, src.c_str(), src.length());
+    SHA1_Update(&impl_->ctx_, src.c_str(), src.length());
     impl_->hasData_ = true;
 }
 
@@ -47,7 +47,7 @@ void SHA::Update(const unsigned char* s, size_t len)
     if ((s == nullptr) || (len == 0))
         return;
 
-    SHA_Update(&impl_->ctx_, s, len);
+    SHA1_Update(&impl_->ctx_, s, len);
     impl_->hasData_ = true;
 }
 
@@ -77,7 +77,7 @@ void SHA::RawValue(unsigned char* buff, size_t len) const
         return;
 
     if (impl_->hasData_)
-        SHA_Final(buff, &impl_->ctx_);
+        SHA1_Final(buff, &impl_->ctx_);
 }
 
 std::string SHA::Calc(const std::string& src)

@@ -7,9 +7,9 @@ TEST(crypto, sm3)
 {
     std::string empty;
     std::string str0("md5");
-    std::string md50("1bc29b36f623ba82aaf6724fd3b16718");
+    std::string md50("110e8d220d4e28a781586dad7b73bbc639d4e0950d129c0941f9eb267dbc5572");
     std::string str1("1bc29b36f623ba82aaf6724fd3b16718");
-    std::string md51("3ce8b30b8e25ea5d9a83d4a073d6ddf8");
+    std::string md51("4b23a3890e6dac402069ae57d20d0715ef2106c2e58d24bd6073970bbb0cbf8d");
     EXPECT_EQ(SM3::Calc(empty), empty);
     EXPECT_EQ(SM3::Calc(str0), md50);
     EXPECT_EQ(SM3::Calc(str1), md51);
@@ -31,5 +31,5 @@ TEST(crypto, sm3)
     h.Update("1bc29b36f623ba82");
     h.Update("aaf6724fd3b16718");
     h.Update("abc");
-    EXPECT_EQ(h.Value(), "66d2355bfbc2b8852fd1ff08d4e72ee8");
+    EXPECT_EQ(h.Value(), "8b9853c16c4ca6fdb24e9d3e9b1789107ad3f91f2c624d60f80bdbaacbf57ba2");
 }

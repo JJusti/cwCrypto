@@ -9,7 +9,7 @@ include(cmake/ucm.cmake)
 # Set variables:
 #   * PROJECT_NAME
 #   * PROJECT_VERSION
-project(cwfl VERSION 0.1.0 LANGUAGES C CXX)
+project(cwcrypto VERSION 0.1.0 LANGUAGES C CXX)
 
 #####
 # Enables link_directories() treat paths relative

@@ -1,8 +1,8 @@
 include_directories(${PROJECT_SOURCE_DIR}/include)
-include_directories(${PROJECT_SOURCE_DIR}/vendor/openssl/${PLATFORMTARGET}/include)
+#include_directories(${PROJECT_SOURCE_DIR}/vendor/openssl/${PLATFORMTARGET}/include)
 include_directories(${PROJECT_SOURCE_DIR}/vendor/GmSSL/${PLATFORMTARGET}/include)
 
-link_directories("${PROJECT_SOURCE_DIR}/vendor/openssl/${PLATFORMTARGET}/lib")
+#link_directories("${PROJECT_SOURCE_DIR}/vendor/openssl/${PLATFORMTARGET}/lib")
 link_directories("${PROJECT_SOURCE_DIR}/vendor/GmSSL/${PLATFORMTARGET}/lib")
 
 set(CPP_HDRS
@@ -28,6 +28,8 @@ set(CPP_SOURCES
   cipher/aes.cpp
   cipher/rc4.cpp
   cipher/rsa.cpp
+  cipher/sm2.cpp
+  cipher/sm4.cpp
   encode/base64.cpp
   hash/md5.cpp
   hash/sha.cpp
@@ -40,4 +42,4 @@ set(CPP_SOURCES
 
 add_library(cwcrypto ${CPP_HDRS} ${CPP_SOURCES})
 
-target_link_libraries(cwcrypto libeay32 ssleay32 libssl libcrypto)
+target_link_libraries(cwcrypto libssl libcrypto)
