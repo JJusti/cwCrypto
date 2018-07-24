@@ -1,236 +1,65 @@
-#ifndef __CRYPTO_H__
-#define __CRYPTO_H__    1
+#include "../include/crypto/crypto.h"
 
-#include <stdlib.h>
-#include <stdint.h>
 
-#ifdef  __cplusplus
-#define EXTERN_C  extern "C"
-#endif
+std::string samples_aes_cbc_encrypt(const char* in, const char* key)
+{
+    size_t in_size = strlen(in);
 
-#ifdef CWCRYPTO_EXPORTS
-#define CWCRYPTO_API    EXTERN_C __declspec(dllexport)
-#else
-#define CWCRYPTO_API    EXTERN_C
-#endif // CWCRYPTO_EXPORTS
+    // AES CBC 加密
+    size_t buffer_size = sizeof(in) + 64;
+    std::vector<char> buffer;
+    if (buffer_size > 0)
+    {
+        buffer.resize(buffer_size);
+        cw_aes_cbc_encrypt(in, in_size, key, &buffer[0], buffer_size);
+    }
 
-#define CWCRYPTO_OK                         (0)
-#define CWCRYPTO_ERROR_INVALID_PARAMS       (1)
-#define CWCRYPTO_ERROR_NOT_ENOUGH_MEMORY    (2)
-#define CWCRYPTO_ERROR_INVALID_KEY          (3)
+    // 加密结果base64
+    std::string base64_str;
+    if (buffer_size > 0)
+    {
+        size_t base64_buffer_size = buffer_size * 2;
+        std::vector<char> base64_buffer;
+        base64_buffer.resize(base64_buffer_size);
+        cw_base64_encode(buffer.data(), buffer_size, &base64_buffer[0], &base64_buffer_size);
+        base64_str.append((char*)base64_buffer.data(), base64_buffer_size);
+    }
+    return base64_str;
+}
 
-/* 支持算法列表
-AES
-RSA1024
-RSA2048
-SM2
-- SM4
+std::string samples_aes_cbc_decrypt(const char* base64_str, const char* key)
+{
+    size_t base64_buffer_len = strlen(base64_str);
 
-- MD5
-- SHA256
-- SM3
+    // 解码base64
+    std::vector<char> base64_buffer;
+    base64_buffer.resize(base64_buffer_len);
 
-- BASE64
+    base64_buffer.resize(base64_buffer_len);
+    cw_base64_decode(base64_str, base64_buffer_len, &base64_buffer[0], &base64_buffer_len);
 
-*/
+    // AES CBC 解密
+    size_t decrypted_len = base64_buffer_len;
+    std::vector<char> decrypted;
+    decrypted.resize(decrypted_len);
+    cw_aes_cbc_decrypt(base64_buffer.data(), base64_buffer_len, key, &decrypted[0], decrypted_len);
+    std::string decrypted_str(decrypted.data(), decrypted_len);
 
-/** AES ECB 加密
-* @param [in] plain_data 明文数据缓冲区
-* @param [in] plain_length 明文数据缓冲区大小
-* @param [in] key 密钥，以 '\0' 结尾字符串
-* @param [out] digest_data 密文保存数据缓冲区
-* @param [in][out] digest_length 输入密文保存数据缓冲区大小，执行成功时返回加密数据长度
-* @return 执行正常返回0，否则返回状态码
-*/
-CWCRYPTO_API int cw_aes_ecb_encrypt(const char* plain_data,
-    size_t plain_length,
-    const char* key,
-    char* cipher_data,
-    size_t& cipher_length);
+    return decrypted_str;
+}
 
-/** AES ECB 解密
-* @param [in] cipher_data 密文数据缓冲区
-* @param [in] cipher_length 密文数据缓冲区大小
-* @param [in] key 密钥，以 '\0' 结尾字符串
-* @param [out] plain_data 明文保存数据缓冲区
-* @param [in][out] plain_length 明文保存数据缓冲区大小，执行成功时返回解密明文数据长度
-* @return 执行正常返回0，否则返回状态码
-*/
-CWCRYPTO_API int cw_aes_ecb_decrypt(const char* cipher_data,
-    size_t cipher_length,
-    const char* key,
-    char* plain_data,
-    size_t& plain_length);
+void main()
+{
+    // 秘钥
+    char key[] = "288D447F83CE9314";
+    // 秘钥
+    char in[] = "{\"userId\":\"b7fec7c124e54220836a3b2cc06e35f0\"}";
 
-/** AES CBC 加密
-* @param [in] plain_data 明文数据缓冲区
-* @param [in] plain_length 明文数据缓冲区大小
-* @param [in] key 密钥，以 '\0' 结尾字符串
-* @param [out] digest_data 密文保存数据缓冲区
-* @param [in][out] digest_length 输入密文保存数据缓冲区大小，执行成功时返回加密数据大小
-* @return 执行正常返回0，否则返回状态码
-*/
-CWCRYPTO_API int cw_aes_cbc_encrypt(const char* plain_data,
-    size_t plain_length,
-    const char* key,
-    char* cipher_data,
-    size_t& cipher_length);
+    std::string base64_result = samples_aes_cbc_encrypt(in, key);
+    std::string out = samples_aes_cbc_decrypt(base64_result.c_str(), key);
 
-/** AES CBC 解密
-* @param [in] cipher_data 密文数据缓冲区
-* @param [in] cipher_length 密文数据缓冲区大小
-* @param [in] key 密钥，以 '\0' 结尾字符串
-* @param [out] plain_data 明文保存数据缓冲区
-* @param [in][out] plain_length 明文保存数据缓冲区大小，执行成功时返回解密明文数据长度
-* @return 执行正常返回0，否则返回状态码
-*/
-CWCRYPTO_API int cw_aes_cbc_decrypt(const char* cipher_data,
-    size_t cipher_length,
-    const char* key,
-    char* plain_data,
-    size_t& plain_length);
-
-/** AES ECB 加密
-* @param [in] plain_data 明文数据缓冲区
-* @param [in] plain_length 明文数据缓冲区大小
-* @param [in] key 密钥，以 '\0' 结尾字符串
-* @param [out] digest_data 密文保存数据缓冲区
-* @param [in][out] digest_length 输入密文保存数据缓冲区大小，执行成功时返回加密数据长度
-* @return 执行正常返回0，否则返回状态码
-*/
-CWCRYPTO_API int cw_aes_ecb_encrypt(const char* plain_data,
-    size_t plain_length,
-    const char* key,
-    char* cipher_data,
-    size_t& cipher_length);
-
-/** SM4 ECB 解密
-* @param [in] cipher_data 密文数据缓冲区
-* @param [in] cipher_length 密文数据缓冲区大小
-* @param [in] key 密钥，以 '\0' 结尾字符串
-* @param [out] plain_data 明文保存数据缓冲区
-* @param [in][out] plain_length 明文保存数据缓冲区大小，执行成功时返回解密明文数据长度
-* @return 执行正常返回0，否则返回状态码
-*/
-CWCRYPTO_API int cw_sm4_ecb_decrypt(const char* cipher_data,
-    size_t cipher_length,
-    const char* key,
-    char* plain_data,
-    size_t& plain_length);
-
-/** SM4 CBC 加密
-* @param [in] plain_data 明文数据缓冲区
-* @param [in] plain_length 明文数据缓冲区大小
-* @param [in] key 密钥，以 '\0' 结尾字符串
-* @param [out] digest_data 密文保存数据缓冲区
-* @param [in][out] digest_length 输入密文保存数据缓冲区大小，执行成功时返回加密数据大小
-* @return 执行正常返回0，否则返回状态码
-*/
-CWCRYPTO_API int cw_sm4_cbc_encrypt(const char* plain_data,
-    size_t plain_length,
-    const char* key,
-    char* cipher_data,
-    size_t& cipher_length);
-
-/** SM4 CBC 解密
-* @param [in] cipher_data 密文数据缓冲区
-* @param [in] cipher_length 密文数据缓冲区大小
-* @param [in] key 密钥，以 '\0' 结尾字符串
-* @param [out] plain_data 明文保存数据缓冲区
-* @param [in][out] plain_length 明文保存数据缓冲区大小，执行成功时返回解密明文数据长度
-* @return 执行正常返回0，否则返回状态码
-*/
-CWCRYPTO_API int cw_sm4_cbc_decrypt(const char* cipher_data,
-    size_t cipher_length,
-    const char* key,
-    char* plain_data,
-    size_t& plain_length);
-
-CWCRYPTO_API int cw_rsa_load_public_key(const char* path, char* buff);
-CWCRYPTO_API int cw_rsa_load_private_key(const char* path, char* buff);
-
-CWCRYPTO_API int cw_rsa_public_encrypt(const char* plain_data,
-    size_t plain_length,
-    const char* public_key,
-    char* cipher_data,
-    size_t& cipher_length);
-
-CWCRYPTO_API int cw_rsa_public_decrypt(const char* cipher_data,
-    size_t cipher_length,
-    const char* private_key,
-    char* plain_data,
-    size_t& plain_length);
-
-CWCRYPTO_API int cw_rsa_private_encrypt(const char* plain_data,
-    size_t plain_length,
-    const char* public_key,
-    char* cipher_data,
-    size_t& cipher_length);
-
-CWCRYPTO_API int cw_rsa_private_decrypt(const char* cipher_data,
-    size_t cipher_length,
-    const char* private_key,
-    char* plain_data,
-    size_t& plain_length);
-
-/** 获取 md5 结果大小
- * @return 返回name对应摘要算法结果大小
-*/
-CWCRYPTO_API int cw_md5_digest_length(const char* name);
-
-/** md5 算法
- * @param [in] plain_data 原始数据地址
- * @param [in] plain_length 原始数据大小
- * @param [out] digest_data 摘要计算结果缓冲区地址，需要保护额外 1 个字节存放字符传结束符
- * @param [in] digest_length 摘要缓冲区大小
- * @return 执行正常返回0，否则返回状态码
-*/
-CWCRYPTO_API int cw_md5(const char* plain_data, size_t plain_length, char* digest_data, size_t digest_length);
-
-/** 获取 sha256 结果大小
- * @return 返回name对应摘要算法结果大小
-*/
-CWCRYPTO_API int cw_sha256_digest_length(const char* name);
-
-/** sha256 算法
- * @param [in] plain_data 原始数据地址
- * @param [in] plain_length 原始数据大小
- * @param [out] digest_data 摘要计算结果缓冲区地址，需要保护额外 1 个字节存放字符传结束符
- * @param [in] digest_length 摘要缓冲区大小
- * @return 执行正常返回0，否则返回状态码
-*/
-CWCRYPTO_API int cw_sha256(const char* plain_data, size_t plain_length, char* digest_data, size_t digest_length);
-
-/** 获取 sm3 结果大小
- * @return 返回name对应摘要算法结果大小
-*/
-CWCRYPTO_API int cw_sm3_digest_length(const char* name);
-
-/** sm3 算法
- * @param [in] plain_data 原始数据地址
- * @param [in] plain_length 原始数据大小
- * @param [out] digest_data 摘要计算结果缓冲区地址，需要保护额外 1 个字节存放字符传结束符
- * @param [in] digest_length 摘要缓冲区大小
- * @return 执行正常返回0，否则返回状态码
-*/
-CWCRYPTO_API int cw_sm3(const char* plain_data, size_t plain_length, char* digest_data, size_t digest_length);
-
-/** Base64 编码
- * @param [in] plain_data 待编码数据地址
- * @param [in] plain_length 待编码数据大小
- * @param [out] encoded_data 编码数据保存缓冲区地址，需要保护额外 1 个字节存放字符传结束符
- * @param [in][out] encoded_length 输入编码数据保存缓冲区大小，输出编码数据大小
- * @return 执行正常返回0，否则返回状态码
-*/
-CWCRYPTO_API int cw_base64_encode(const char *plain_data, size_t plain_length, char *encoded_data, size_t *encoded_length);
-
-/** Base64 解码
- * @param [in] encoded_data Base64编码字符串地址
- * @param [in] encoded_length Base64编码字符串大小
- * @param [out] decoded_data 解码数据保存缓冲区地址
- * @param [out] decoded_length 输入解码数据保存缓冲区大小，数据解码数据大小
- * @return 执行正常返回0，否则返回状态码
-*/
-CWCRYPTO_API int cw_base64_decode(const char *encoded_data, size_t encoded_length, char *decoded_data, size_t* decoded_length);
-
-#endif // __CRYPTO_H__
+    if(out == in)
+        printf("OK %s\r\n", base64_result.c_str());
+    else
+        printf("ERROR %s\r\n", base64_result.c_str());
+}
